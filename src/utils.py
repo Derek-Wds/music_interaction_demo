@@ -118,12 +118,9 @@ def numpy_to_midi(sample_roll, display=False, interpolation=False):
     music.instruments.append(piano)
     if display:
         plt.figure(figsize=(30, 10))
-        
-        # '#8c1aff'
-#         cmap = matplotlib.colors.ListedColormap(['black', '#a64dff', '#d24dff', '#ff80ff', '#ff80d5', '#ff80aa', '#ff8080', '#ff944d'])
-        
+        start, end = bound(m=music.get_piano_roll(100))
         if interpolation:
-            shape = music.get_piano_roll(100)[48:84].shape
+            shape = music.get_piano_roll(100)[start+1:end-1].shape
             if shape[1] == 9600:
                 plt.axvspan(0,16, facecolor="#6600cc", alpha=0.5)
                 plt.axvspan(16,32, facecolor="#8510b3", alpha=0.5)
@@ -139,17 +136,32 @@ def numpy_to_midi(sample_roll, display=False, interpolation=False):
                 plt.axvspan(8,10, facecolor="#e04069", alpha=0.5)
                 plt.axvspan(10,12, facecolor="#ff5050", alpha=0.5)
             cmap = matplotlib.colors.ListedColormap(['white', "black"])
-            librosa.display.specshow(music.get_piano_roll(100)[48:84],
+            librosa.display.specshow(music.get_piano_roll(100)[start:end],
                                      hop_length=1, sr=100, x_axis='time', y_axis='cqt_note',
                                      fmin=pretty_midi.note_number_to_hz(48), cmap=cmap, shading='flat')
         else:
-            librosa.display.specshow(music.get_piano_roll(100)[48:84],
+            librosa.display.specshow(music.get_piano_roll(100)[start:end],
                                      hop_length=1, sr=100, x_axis='time', y_axis='cqt_note',
                                      fmin=pretty_midi.note_number_to_hz(48), cmap="inferno", shading='flat')
         
         plt.show()
         
     return music.synthesize(wave=scipy.signal.square)
+
+def bound(m=None):
+    start = 0
+    end = 0
+    for line in range(m.shape[0]):
+        if 100 in m[line]:
+            start = line
+            break
+    for line in range(m.shape[0]-1, 0, -1):
+        if 100 in m[line]:
+            end = line
+            break
+    bound = (end - start)//2
+    return start-bound-1, end+bound+1
+
 
 def load_old_model(param_path):
     model = VAE(130, 2048, 128, 32)
