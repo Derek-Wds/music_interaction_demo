@@ -133,8 +133,8 @@ def render_interpolation():
                interpolation_rate=(0., 1.),
                model=fixed(model),
                dimensions=[('all', list(range(z.shape[1]))), 
-                     ('key_dims', [127, 96, 7, 84, 117, 45, 79, 1, 73]), 
-                     ('rest_dims', np.setdiff1d(range(128), [127, 96, 7, 84, 117, 45, 79, 1, 73]).tolist())])
+                     ('key_dims', [127, 96, 7, 84, 60, 117, 45, 79, 1, 73]), 
+                     ('rest_dims', np.setdiff1d(range(128), [127, 96, 7, 84, 60, 117, 45, 79, 1, 73]).tolist())])
 
 def render_keyboard():
     return interact_manual(

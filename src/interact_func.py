@@ -75,3 +75,4 @@ def interpolation(p0, p1, interpolation_rate, dimensions, model):
         out.extend(output)
     output = numpy_to_midi(np.concatenate(np.array(out), 0), display=True, interpolation=True)
     IPython.display.display(IPython.display.Audio(output, rate=22050))
+    

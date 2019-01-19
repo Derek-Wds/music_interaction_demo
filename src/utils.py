@@ -6,6 +6,7 @@ import scipy.signal
 import librosa.display
 import IPython.display
 from IPython.display import clear_output
+import matplotlib
 import matplotlib.pyplot as plt
 from ipywidgets import Layout, Button, Box, VBox, ButtonStyle, interact_manual, ToggleButtons
 from src.models.model import VAE
@@ -29,7 +30,7 @@ note_to_num = {"C#3": 49, "C#4": 61, "C#5": 73, "D#3": 51, "D#4": 63, "D#5": 75,
                    "A#3": 58, "A#4": 70, "A#5": 82, "C3": 48, "C4": 60, "C5": 72, "C6": 84,
                    "D3": 50, "D4": 62, "D5": 74, "E3": 52, "E4": 64, "E5": 76,
                    "F3": 53, "F4": 65, "F5": 77, "G3": 55, "G4": 67, "G5": 79,
-                   "A3": 57, "A4": 69, "A5": 81, "B3": 59, "B4": 71, "B3": 83}
+                   "A3": 57, "A4": 69, "A5": 81, "B3": 59, "B4": 71, "B5": 83}
 
 
 def interpolation(z1, z2, t, dims=None):
@@ -116,16 +117,36 @@ def numpy_to_midi(sample_roll, display=False, interpolation=False):
             t += 1 / 16
     music.instruments.append(piano)
     if display:
-#         print(music.get_piano_roll(100)[48:84])
-#         print(music.get_piano_roll(100)[48:84].shape)
+        plt.figure(figsize=(30, 10))
         
-        librosa.display.specshow(music.get_piano_roll(100)[48:84],
-                                 hop_length=1, sr=100, x_axis='time', y_axis='cqt_note',
-                                 fmin=pretty_midi.note_number_to_hz(48))
+        # '#8c1aff'
+#         cmap = matplotlib.colors.ListedColormap(['black', '#a64dff', '#d24dff', '#ff80ff', '#ff80d5', '#ff80aa', '#ff8080', '#ff944d'])
+        
         if interpolation:
-            plt.figure(figsize=(18, 6))
+            shape = music.get_piano_roll(100)[48:84].shape
+            if shape[1] == 9600:
+                plt.axvspan(0,16, facecolor="#6600cc", alpha=0.5)
+                plt.axvspan(16,32, facecolor="#8510b3", alpha=0.5)
+                plt.axvspan(32,48, facecolor="#a3209a", alpha=0.5)
+                plt.axvspan(48,64, facecolor="#c23082", alpha=0.5)
+                plt.axvspan(64,80, facecolor="#e04069", alpha=0.5)
+                plt.axvspan(80,96, facecolor="#ff5050", alpha=0.5)
+            else:
+                plt.axvspan(0,2, facecolor="#6600cc", alpha=0.5)
+                plt.axvspan(2,4, facecolor="#8510b3", alpha=0.5)
+                plt.axvspan(4,6, facecolor="#a3209a", alpha=0.5)
+                plt.axvspan(6,8, facecolor="#c23082", alpha=0.5)
+                plt.axvspan(8,10, facecolor="#e04069", alpha=0.5)
+                plt.axvspan(10,12, facecolor="#ff5050", alpha=0.5)
+            cmap = matplotlib.colors.ListedColormap(['white', "black"])
+            librosa.display.specshow(music.get_piano_roll(100)[48:84],
+                                     hop_length=1, sr=100, x_axis='time', y_axis='cqt_note',
+                                     fmin=pretty_midi.note_number_to_hz(48), cmap=cmap, shading='flat')
         else:
-            plt.figure(figsize=(18, 6))
+            librosa.display.specshow(music.get_piano_roll(100)[48:84],
+                                     hop_length=1, sr=100, x_axis='time', y_axis='cqt_note',
+                                     fmin=pretty_midi.note_number_to_hz(48), cmap="inferno", shading='flat')
+        
         plt.show()
         
     return music.synthesize(wave=scipy.signal.square)
@@ -348,5 +369,4 @@ def play_note(number, note_style):
     output = numpy_to_midi(np.concatenate(np.array([music_array]), 0))
 #     display(IPython.display.Audio(output, rate=22050, autoplay=True))
     return music_array
-
     
