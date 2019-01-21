@@ -3,6 +3,7 @@ import IPython.display
 import torch
 import matplotlib.pyplot as plt
 from src.utils import numpy_to_midi
+from src.interpolation_plot import *
 
 
 def z_pitch_plot(idx, z_pitch):
@@ -76,3 +77,4 @@ def interpolation(p0, p1, interpolation_rate, dimensions, model):
     output = numpy_to_midi(np.concatenate(np.array(out), 0), display=True, interpolation=True)
     IPython.display.display(IPython.display.Audio(output, rate=22050))
     
+    plot_interpolation(p0, p1, model)

@@ -88,8 +88,6 @@ def load_samples():
     try:
         sample = torch.from_numpy(np.load('data/source_data.npy')).float()
         target = torch.from_numpy(np.load('data/target_data.npy')).float()
-        os.remove('data/source_data.npy')
-        os.remove('data/target_data.npy')
     except:
         sample = torch.from_numpy(np.load('data/data_right00.npy')).float()
         target = torch.from_numpy(np.load('data/ngx.npy')).float()

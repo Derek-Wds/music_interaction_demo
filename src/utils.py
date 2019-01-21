@@ -290,11 +290,11 @@ def src_clicked(b):
     # check which button is presses
     else:
         if note_style.value == "Half Note":
-            print("Note for source sample: \033[1m\033[94m{} -\033[0m\033[0m has been recorded!".format(b.description))
+            print("\033[1m\033[94m{} - - - -\033[0m\033[0m".format(b.description), end=' ')
         elif note_style.value == "Quarter Note":
-            print("Note for source sample: \033[1m\033[94m{} - - -\033[0m\033[0m has been recorded!".format(b.description))
+            print("\033[1m\033[94m{} - -\033[0m\033[0m".format(b.description), end=' ')
         else:
-            print("Note for source sample: \033[1m\033[94m{} - - - - - - -\033[0m\033[0m has been recorded!".format(b.description))
+            print("\033[1m\033[94m{} -\033[0m\033[0m".format(b.description), end=' ')
         
         note = play_note(int(note_to_num[b.description]), note_style)
         src_note_list.extend(note)
@@ -312,11 +312,11 @@ def tgt_clicked(b):
     # check which button is presses
     else:
         if note_style.value == "Half Note":
-            print("Note for target sample: \033[1m\033[94m{} -\033[0m\033[0m has been recorded!".format(b.description))
+            print("\033[1m\033[94m{} - - - -\033[0m\033[0m".format(b.description), end=' ')
         elif note_style.value == "Quarter Note":
-            print("Note for target sample: \033[1m\033[94m{} ---\033[0m\033[0m has been recorded!".format(b.description))
+            print("\033[1m\033[94m{} - -\033[0m\033[0m".format(b.description), end=' ')
         else:
-            print("Note for target sample: \033[1m\033[94m{} -------\033[0m\033[0m has been recorded!".format(b.description))
+            print("\033[1m\033[94m{} -\033[0m\033[0m".format(b.description), end=' ')
         note = play_note(int(note_to_num[b.description]), note_style)
         tgt_note_list.extend(note)
 #         print("Note {} has been clicked and recorded!".format(b.description))
